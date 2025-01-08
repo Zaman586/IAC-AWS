@@ -31,4 +31,4 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"  # Instance type can be adjusted based on your requirements
 
   # Use the existing SSH key pair in AWS (replace with your key name)
-  key_name      = "key-049413711"
+  key_name      = "key-049413711"}
