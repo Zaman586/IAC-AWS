@@ -32,7 +32,7 @@ resource "aws_security_group" "allow_all" {
 
 # Create an EC2 instance (VM) with updated instance type and VPC configuration
 resource "aws_instance" "example" {
-  ami           = "ami-0c02fb55956c7d316"  # Amazon Linux 2 AMI (compatible with t3.micro)
+  ami           = "ami-0e2c8caa4b6378d8c"  # Amazon Linux 2 AMI (compatible with t3.micro)
   instance_type = "t3.micro"               # Changed to t3.micro, supports UEFI and Nitro System
 
   # Use the existing SSH key pair in AWS (replace with your key name)
