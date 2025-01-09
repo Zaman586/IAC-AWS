@@ -36,7 +36,7 @@ resource "aws_instance" "example" {
   instance_type = "t3.micro"               # Changed to t3.micro, supports UEFI and Nitro System
 
   # Use the existing SSH key pair in AWS (replace with your key name)
-  key_name      = "key-049413711"
+  key_name      = "key-0666aeaf890d629b0"
 
   # Associate the security group with the instance
   vpc_security_group_ids = [aws_security_group.allow_all.id]
