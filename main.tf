@@ -1,13 +1,11 @@
 # Provider Configuration
 provider "aws" {
-  region     = "us-east-1"  # Default region
-  access_key = var.AWS_ACCESS_KEY_ID
-  secret_key = var.AWS_SECRET_ACCESS_KEY
+  region = "us-east-1"
 }
 
 # VPC ID (Explicitly mention your VPC ID)
 resource "aws_security_group" "allow_all" {
-  vpc_id      = "vpc-0c94ff138dc12f1ac"  # Replace with your VPC ID
+  vpc_id      = var.vpc_id
   name_prefix = "allow_all_"
   description = "Allow inbound traffic"
 
@@ -36,14 +34,33 @@ resource "aws_instance" "example" {
   instance_type = "t3.micro"               # Changed to t3.micro, supports UEFI and Nitro System
 
   # Use the existing SSH key pair in AWS (replace with your key name)
-  key_name      = "keypairterraform"
+  key_name      = var.key_name
 
   # Associate the security group with the instance
   vpc_security_group_ids = [aws_security_group.allow_all.id]
 
-  subnet_id = "subnet-08d6da63096114956"  # Replace with a valid subnet ID from your VPC
+  subnet_id = var.subnet_id  # Replace with a valid subnet ID from your VPC
+
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name  # Attach the IAM role
 
   tags = {
     Name = "ExampleInstance"
   }
+}
+
+# IAM Role and Instance Profile
+resource "aws_iam_role" "ec2_role" {
+  name = "MyEC2Role"
+  assume_role_policy = file("trust_policy.json")
+}
+
+resource "aws_iam_role_policy" "ec2_policy" {
+  name   = "MyEC2Policy"
+  role   = aws_iam_role.ec2_role.id
+  policy = file("policy.json")
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "MyEC2InstanceProfile"
+  role = aws_iam_role.ec2_role.name
 }
